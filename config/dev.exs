@@ -24,7 +24,8 @@ config :fbittipline, FbittiplineWeb.Endpoint,
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:fbittipline, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:fbittipline, ~w(--watch)]}
-  ]
+  ],
+  server: true
 
 # ## SSL Support
 #
