@@ -1,0 +1,19 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Submitted Tips</h1>
+
+  <%= if Enum.empty?(@submissions) do %>
+    <p class="text-gray-600">No tips have been submitted yet.</p>
+  <% else %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <%= for submission <- @submissions do %>
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-2"><%= submission.title %></h2>
+          <p class="text-gray-600 mb-4"><%= submission.body %></p>
+          <p class="text-sm text-gray-500">
+            Submitted on: <%= Calendar.strftime(submission.inserted_at, "%Y-%m-%d %H:%M:%S") %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,91 @@
+<div class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <header class="mb-8 text-center">
+      <img src={~p"/images/fbi.png"} alt="FBI Seal" class="mx-auto h-32 mb-4">
+      <h1 class="text-4xl font-bold text-blue-900">FBI Tip Line</h1>
+      <p class="text-lg text-gray-600">Submit confidential information securely</p>
+    </header>
+
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-2xl mx-auto">
+      <form id="tipForm" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+            Tip Title
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="title"
+            type="text"
+            placeholder="Enter a brief title for your tip"
+            required
+          >
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="message">
+            Tip Details
+          </label>
+          <textarea
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="message"
+            placeholder="Provide detailed information about your tip"
+            rows="6"
+            required
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Submit Tip
+          </button>
+          <p class="text-sm text-gray-600 italic">Your information will be kept confidential.</p>
+        </div>
+      </form>
+    </div>
+
+    <footer class="text-center text-gray-500 text-xs">
+     not the fbi btw lol
+    </footer>
+  </div>
+</div>
+
+<script>
+  document.getElementById('tipForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('title').value;
+    const message = document.getElementById('message').value;
+    
+    fetch("https://api.ipify.org?format=json")
+      .then(response => response.json())
+      .then(data => {
+        const ip = data.ip;
+        const payload = JSON.stringify({ submission: { title: title, body: message } });
+        console.log('Payload:', payload);
+        return fetch('/api/submissions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: payload,
+        });
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Success:', data);
+        alert('Tip submitted successfully. Thank you for your information.');
+        document.getElementById('title').value = '';
+        document.getElementById('message').value = '';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the tip. Please try again.');
+      });
+  });
+</script>
